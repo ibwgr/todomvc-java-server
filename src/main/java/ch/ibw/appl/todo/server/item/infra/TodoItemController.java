@@ -21,23 +21,23 @@ public class TodoItemController {
   public void createRoutes(Service server) {
     ResponseTransformer jsonSerializer = model -> new JSONSerializer().serialize(model);
 
-    server.get("/todos", "application/json",
+    server.get("/todo/items", "application/json",
             (request, response) -> {
               response.type("application/json");
               return todoItemService.all();
             },
             jsonSerializer);
 
-//    server.get("/todos", "text/csv",
+//    server.get("/todo/items", "text/csv",
 //            (request, response) ->  todoItemService.all(),
 //            model -> null/*make csv*/);
 
-    server.get("/todos/:id", (request, response) -> {
+    server.get("/todo/items/:id", (request, response) -> {
       long id = Long.parseLong(request.params("id"));
       return todoItemService.getById(id);
     }, jsonSerializer);
 
-    server.post("/todos", (request, response) -> {
+    server.post("/todo/items", (request, response) -> {
       TodoItem item = new JSONSerializer().deserialize(request.body(), new TypeReference<TodoItem>() {
       });
       return todoItemService.create(item);

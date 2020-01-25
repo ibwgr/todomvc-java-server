@@ -23,11 +23,11 @@ public class SparkServer<T extends SparkApplication> extends ExternalResource {
   private String protocolHostPort;
   private HttpClient httpClient;
 
-  public SparkServer(Class<T> sparkApplicationClass) {
+  SparkServer(Class<T> sparkApplicationClass) {
     this(sparkApplicationClass, Service.SPARK_DEFAULT_PORT);
   }
 
-  public SparkServer(Class<T> sparkApplicationClass, int port) {
+  SparkServer(Class<T> sparkApplicationClass, int port) {
     this.sparkApplicationClass = sparkApplicationClass;
     this.protocolHostPort = "http://localhost:" + port;
     this.httpClient = new HttpClient(1);

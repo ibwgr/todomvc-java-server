@@ -2,7 +2,7 @@ package ch.ibw.appl.todo.server.item.service;
 
 import ch.ibw.appl.todo.server.item.model.ModelId;
 import ch.ibw.appl.todo.server.item.model.TodoItem;
-import ch.ibw.appl.todo.server.service.Repository;
+import ch.ibw.appl.todo.server.shared.service.Repository;
 
 import java.util.List;
 

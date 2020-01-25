@@ -1,4 +1,4 @@
-package ch.ibw.appl.todo.server;
+package ch.ibw.appl.todo.server.shared.infra;
 
 import ch.ibw.appl.todo.server.hello.HelloController;
 import ch.ibw.appl.todo.server.item.infra.TodoItemController;

@@ -1,4 +1,4 @@
-package ch.ibw.appl.todo.server.service;
+package ch.ibw.appl.todo.server.shared.service;
 
 import ch.ibw.appl.todo.server.item.model.ModelId;
 

@@ -21,7 +21,7 @@ public class TodoTest extends FunctionalTest {
 
   @Test
   public void notAcceptable() throws HttpClientException {
-    GetMethod method = httpClient.get("/todos", false);
+    GetMethod method = httpClient.get("/todo/items", false);
     HttpResponse response = httpClient.execute(method);
 
     assertEquals(HttpStatus.NOT_ACCEPTABLE_406, response.code());
@@ -29,8 +29,8 @@ public class TodoTest extends FunctionalTest {
 
   @Test
   public void get_todos() {
-    HttpResponse response = executeGet("/todos");
-//    HttpResponse response = executeGet("/todos", "text/csv");
+    HttpResponse response = executeGet("/todo/items");
+//    HttpResponse response = executeGet("/todo/items", "text/csv");
 
     assertEquals(HttpStatus.OK_200, response.code());
     assertEquals("application/json", response.headers().get("Content-Type").get(0));
@@ -43,7 +43,7 @@ public class TodoTest extends FunctionalTest {
 
   @Test
   public void get_byId() {
-    HttpResponse response = executeGet("/todos/23");
+    HttpResponse response = executeGet("/todo/items/23");
 
     assertEquals(HttpStatus.OK_200, response.code());
     assertEquals("application/json", response.headers().get("Content-Type").get(0));
@@ -56,7 +56,7 @@ public class TodoTest extends FunctionalTest {
 
   @Test
   public void get_byId_nodFound() {
-    HttpResponse response = executeGet("/todos/42");
+    HttpResponse response = executeGet("/todo/items/42");
 
     assertEquals(HttpStatus.NOT_FOUND_404, response.code());
     assertEquals("application/json", response.headers().get("Content-Type").get(0));
@@ -68,7 +68,7 @@ public class TodoTest extends FunctionalTest {
   @Test
   public void create_todo() {
     Object item = TodoItem.create("Neues Item");
-    HttpResponse response = executePost("/todos", item);
+    HttpResponse response = executePost("/todo/items", item);
 
     assertEquals(HttpStatus.OK_200, response.code());
     assertEquals("application/json", response.headers().get("Content-Type").get(0));
@@ -81,7 +81,7 @@ public class TodoTest extends FunctionalTest {
   @Test
   public void create_todo_validationFailed() {
     Object item = TodoItem.create("");
-    HttpResponse response = executePost("/todos", item);
+    HttpResponse response = executePost("/todo/items", item);
 
     assertEquals(HttpStatus.UNPROCESSABLE_ENTITY_422, response.code());
     assertEquals("application/json", response.headers().get("Content-Type").get(0));

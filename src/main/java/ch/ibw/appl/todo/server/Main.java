@@ -1,5 +1,7 @@
 package ch.ibw.appl.todo.server;
 
+import ch.ibw.appl.todo.server.shared.infra.HttpServer;
+
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -7,6 +9,7 @@ import java.util.Optional;
  * 1. setup spark maven based hello world project
  *  - maven & pom basics
  *    http://sparkjava.com/tutorials/maven-setup
+ *    https://maven.apache.org/guides/getting-started/maven-in-five-minutes.html
  *  - http server abstraction
  *    api server framework commons
  *  - testing
@@ -36,14 +39,13 @@ import java.util.Optional;
  *
  * 5. optional: deployment
  *  - fat jar packaging
- *    TODO not working with Hibernate
- *    mvn clean package && java -jar target/server-1.0-SNAPSHOT.jar
+ *    mvn clean package && java -jar target/server-1.0-SNAPSHOT-jar-with-dependencies.jar
  *  - CLI port argument parsing
  *
  * Outlook:
  *  - CDI, Contextual Dependency Injection
  *    google guice
- *  - Configuration Managament
+ *  - Configuration Management
  *    test vs dev vs production
  *    database migrations
  *  - Advanced ORM
