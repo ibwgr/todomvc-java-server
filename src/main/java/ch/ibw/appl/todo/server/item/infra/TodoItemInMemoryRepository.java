@@ -13,7 +13,7 @@ public class TodoItemInMemoryRepository implements TodoItemRepository<TodoItem> 
   private HashMap<ModelId, TodoItem> map = new HashMap<>();
   private long nextId = 0;
 
-  public TodoItemInMemoryRepository(Boolean isTest) {
+  TodoItemInMemoryRepository(boolean isTest) {
     if(isTest){
       nextId = 23;
       this.add(TodoItem.create("Item 23"));

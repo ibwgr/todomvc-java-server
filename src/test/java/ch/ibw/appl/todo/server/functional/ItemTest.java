@@ -1,7 +1,7 @@
 package ch.ibw.appl.todo.server.functional;
 
-import ch.ibw.appl.todo.server.item.infra.JSONSerializer;
-import ch.ibw.appl.todo.server.functional.infra.FunctionalTest;
+import ch.ibw.appl.todo.server.shared.service.JSONSerializer;
+import ch.ibw.appl.todo.server.functional.shared.FunctionalTest;
 import ch.ibw.appl.todo.server.item.model.ModelId;
 import ch.ibw.appl.todo.server.item.model.TodoItem;
 import com.despegar.http.client.GetMethod;
@@ -17,7 +17,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-public class TodoTest extends FunctionalTest {
+public class ItemTest extends FunctionalTest {
 
   @Test
   public void notAcceptable() throws HttpClientException {

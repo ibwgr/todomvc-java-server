@@ -1,7 +1,7 @@
-package ch.ibw.appl.todo.server.functional.infra;
+package ch.ibw.appl.todo.server.functional.shared;
 
 import ch.ibw.appl.todo.server.shared.infra.HttpServer;
-import ch.ibw.appl.todo.server.item.infra.JSONSerializer;
+import ch.ibw.appl.todo.server.shared.service.JSONSerializer;
 import com.despegar.http.client.GetMethod;
 import com.despegar.http.client.HttpClientException;
 import com.despegar.http.client.HttpResponse;

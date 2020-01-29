@@ -1,6 +1,6 @@
 package ch.ibw.appl.todo.server.functional;
 
-import ch.ibw.appl.todo.server.functional.infra.FunctionalTest;
+import ch.ibw.appl.todo.server.functional.shared.FunctionalTest;
 import com.despegar.http.client.HttpResponse;
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package ch.ibw.appl.todo.server.item.infra;
+package ch.ibw.appl.todo.server.shared.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;

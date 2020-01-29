@@ -1,6 +1,6 @@
-# first install and start a mysql server on your machine
-# then:
-# $ mysql -h localhost -uroot -p < src/main/resources/META-INF/testdata.sql
+-- first install and start a mysql server on your machine
+-- then:
+-- $ mysql -h localhost -uroot -p < src/main/resources/META-INF/testdata.sql
 
-TRUNCATE TABLE todo.TodoItem;
-INSERT INTO todo.TodoItem VALUES (23, 'Item 23');
+TRUNCATE TABLE TodoItem;
+INSERT INTO TodoItem VALUES (23, 'Item 23');

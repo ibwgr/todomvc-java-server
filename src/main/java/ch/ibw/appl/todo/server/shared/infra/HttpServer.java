@@ -6,6 +6,7 @@ import ch.ibw.appl.todo.server.item.service.ValidationError;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import org.eclipse.jetty.http.HttpStatus;
+import org.slf4j.LoggerFactory;
 import spark.Service;
 
 public class HttpServer {
@@ -44,6 +45,7 @@ public class HttpServer {
         response.body(node.toString());
         response.status(HttpStatus.UNPROCESSABLE_ENTITY_422);
       } else {
+        LoggerFactory.getLogger(HttpServer.class).error(exception.toString());
         response.body("");
         response.status(HttpStatus.INTERNAL_SERVER_ERROR_500);
       }

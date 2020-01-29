@@ -1,4 +1,4 @@
-package ch.ibw.appl.todo.server.functional.infra;
+package ch.ibw.appl.todo.server.functional.shared;
 
 import com.despegar.http.client.DeleteMethod;
 import com.despegar.http.client.GetMethod;

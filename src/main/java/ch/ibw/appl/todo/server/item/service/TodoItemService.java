@@ -1,6 +1,5 @@
 package ch.ibw.appl.todo.server.item.service;
 
-import ch.ibw.appl.todo.server.item.infra.TodoItemHibernateRepository;
 import ch.ibw.appl.todo.server.item.model.ModelId;
 import ch.ibw.appl.todo.server.item.model.TodoItem;
 
@@ -8,10 +7,6 @@ import java.util.List;
 
 public class TodoItemService {
   private final TodoItemRepository<TodoItem> repo;
-
-  public TodoItemService() {
-    repo = new TodoItemHibernateRepository();
-  }
 
   public TodoItemService(TodoItemRepository<TodoItem> repo) {
     this.repo = repo;
