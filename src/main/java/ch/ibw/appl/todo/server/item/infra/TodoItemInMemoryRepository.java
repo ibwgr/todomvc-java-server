@@ -5,12 +5,13 @@ import ch.ibw.appl.todo.server.item.model.TodoItem;
 import ch.ibw.appl.todo.server.item.service.TodoItemRepository;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 public class TodoItemInMemoryRepository implements TodoItemRepository<TodoItem> {
-  private HashMap<ModelId, TodoItem> map = new HashMap<>();
+  private Map<ModelId, TodoItem> map = Collections.synchronizedMap(new LinkedHashMap<>());
   private long nextId = 0;
 
   TodoItemInMemoryRepository(boolean isTest) {

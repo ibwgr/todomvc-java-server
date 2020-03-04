@@ -11,8 +11,8 @@ public class TodoItemController {
 
   public TodoItemController(Boolean isTest) {
     if (isTest) {
-//      todoItemService = new TodoItemService(new TodoItemInMemoryRepository(isTest));
-      todoItemService = new TodoItemService(new TodoItemSQL2ORepository(isTest));
+      todoItemService = new TodoItemService(new TodoItemInMemoryRepository(isTest));
+//      todoItemService = new TodoItemService(new TodoItemSQL2ORepository(isTest));
     } else {
       todoItemService = new TodoItemService(new TodoItemHibernateRepository());
     }
