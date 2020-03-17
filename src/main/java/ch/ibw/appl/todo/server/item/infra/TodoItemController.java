@@ -4,6 +4,7 @@ import ch.ibw.appl.todo.server.item.service.TodoItemService;
 import ch.ibw.appl.todo.server.item.model.TodoItem;
 import ch.ibw.appl.todo.server.shared.service.JSONSerializer;
 import com.fasterxml.jackson.core.type.TypeReference;
+import org.eclipse.jetty.http.HttpStatus;
 import spark.Service;
 
 public class TodoItemController {
@@ -39,6 +40,7 @@ public class TodoItemController {
 
     server.post("/todo/items", (request, response) -> {
       TodoItem item = jsonSerializer.deserialize(request.body(), new TypeReference<TodoItem>() {});
+      response.status(HttpStatus.CREATED_201);
       return todoItemService.create(item);
     }, jsonSerializer::serialize);
   }

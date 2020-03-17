@@ -55,7 +55,7 @@ public class ItemTest extends FunctionalTest {
   }
 
   @Test
-  public void get_byId_nodFound() {
+  public void get_byId_notFound() {
     HttpResponse response = executeGet("/todo/items/42");
 
     assertEquals(HttpStatus.NOT_FOUND_404, response.code());
@@ -70,7 +70,7 @@ public class ItemTest extends FunctionalTest {
     Object item = TodoItem.create("Neues Item");
     HttpResponse response = executePost("/todo/items", item);
 
-    assertEquals(HttpStatus.OK_200, response.code());
+    assertEquals(HttpStatus.CREATED_201, response.code());
     assertEquals("application/json", response.headers().get("Content-Type").get(0));
 
     String body = new String(response.body());
