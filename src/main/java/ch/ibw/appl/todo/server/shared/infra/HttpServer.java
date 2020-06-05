@@ -28,13 +28,30 @@ public class HttpServer {
     new HelloController(isTest).createRoutes(server);
 
     server.before(((request, response) -> {
-      // exclude /hello example from requiring application/json
-      if(!request.pathInfo().equalsIgnoreCase("/hello")){
-        if(!request.headers("Accept").contains("application/json")){
+      // exclude /hello (and CORS OPTIONS request) from requiring to accept application/json
+      final boolean isCorsPreflight = request.requestMethod().equalsIgnoreCase("options");
+      final boolean isHello = request.pathInfo().equalsIgnoreCase("/hello");
+      if(!isHello && !isCorsPreflight){
+        final boolean clientWantsJson = request.headers("Accept").contains("application/json");
+        if(!clientWantsJson){
           server.halt(HttpStatus.NOT_ACCEPTABLE_406);
         }
       }
     }));
+
+    server.before((request,response) -> response.header("Access-Control-Allow-Origin", "*"));
+
+    server.options("/*", (request,response) -> {
+      String accessControlRequestHeaders = request.headers("Access-Control-Request-Headers");
+      if (accessControlRequestHeaders != null) {
+        response.header("Access-Control-Allow-Headers", accessControlRequestHeaders);
+      }
+      String accessControlRequestMethod = request.headers("Access-Control-Request-Method");
+      if(accessControlRequestMethod != null){
+        response.header("Access-Control-Allow-Methods", accessControlRequestMethod);
+      }
+      return "OK";
+    });
 
     server.afterAfter(((request, response) -> response.type("application/json")));
 
@@ -43,7 +60,7 @@ public class HttpServer {
         String message = ((ValidationError) exception).message;
         JsonNode node = JsonNodeFactory.instance.objectNode().set("message", JsonNodeFactory.instance.textNode(message));
         response.body(node.toString());
-        response.status(HttpStatus.UNPROCESSABLE_ENTITY_422);
+        response.status(HttpStatus.BAD_REQUEST_400);
       } else {
         LoggerFactory.getLogger(HttpServer.class).error(exception.toString());
         response.body("");
@@ -51,7 +68,7 @@ public class HttpServer {
       }
     });
 
-    server.notFound(((request, response) -> ""));
+    server.notFound((request, response) -> "");
 
     server.awaitInitialization();
   }

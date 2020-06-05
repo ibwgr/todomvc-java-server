@@ -29,10 +29,6 @@ public class TodoItemController {
             },
             jsonSerializer::serialize);
 
-//    server.get("/todo/items", "text/csv",
-//            (request, response) ->  todoItemService.all(),
-//            model -> null/*make csv*/);
-
     server.get("/todo/items/:id", (request, response) -> {
       long id = Long.parseLong(request.params("id"));
       return todoItemService.getById(id);
