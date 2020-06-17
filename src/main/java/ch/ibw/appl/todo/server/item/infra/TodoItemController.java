@@ -12,10 +12,10 @@ public class TodoItemController {
 
   public TodoItemController(Boolean isTest) {
     if (isTest) {
-      todoItemService = new TodoItemService(new TodoItemInMemoryRepository(isTest));
 //      todoItemService = new TodoItemService(new TodoItemSQL2ORepository(isTest));
     } else {
-      todoItemService = new TodoItemService(new TodoItemHibernateRepository());
+      todoItemService = new TodoItemService(new TodoItemInMemoryRepository(isTest));
+//      todoItemService = new TodoItemService(new TodoItemHibernateRepository());
     }
   }
 
@@ -36,6 +36,13 @@ public class TodoItemController {
 
     server.post("/todo/items", (request, response) -> {
       TodoItem item = jsonSerializer.deserialize(request.body(), new TypeReference<TodoItem>() {});
+
+      if(item.description.equals("admin")){
+        // spark erstellt automatisch ein JSESSIONID cookie
+        // auf dem server wird ein key/value store eingerichtet pro session id
+        request.session(true);
+      }
+
       response.status(HttpStatus.CREATED_201);
       return todoItemService.create(item);
     }, jsonSerializer::serialize);
