@@ -31,25 +31,31 @@ public class HttpServer {
       // exclude /hello (and CORS OPTIONS request) from requiring to accept application/json
       final boolean isCorsPreflight = request.requestMethod().equalsIgnoreCase("options");
       final boolean isHello = request.pathInfo().equalsIgnoreCase("/hello");
-      if(!isHello && !isCorsPreflight){
+      if (!isHello && !isCorsPreflight) {
         final boolean clientWantsJson = request.headers("Accept").contains("application/json");
-        if(!clientWantsJson){
+        if (!clientWantsJson) {
           server.halt(HttpStatus.NOT_ACCEPTABLE_406);
         }
       }
     }));
 
-    server.before((request,response) -> response.header("Access-Control-Allow-Origin", "*"));
+    server.before((request, response) -> {
+      // allow any origin (same as *, but required if credentials are included)
+      response.header("Access-Control-Allow-Origin", request.headers("origin"));
+      // required if credentials are included
+      response.header("Access-Control-Allow-Credentials", "true");
+    });
 
-    server.options("/*", (request,response) -> {
+    server.options("/*", (request, response) -> {
       String accessControlRequestHeaders = request.headers("Access-Control-Request-Headers");
       if (accessControlRequestHeaders != null) {
         response.header("Access-Control-Allow-Headers", accessControlRequestHeaders);
       }
       String accessControlRequestMethod = request.headers("Access-Control-Request-Method");
-      if(accessControlRequestMethod != null){
+      if (accessControlRequestMethod != null) {
         response.header("Access-Control-Allow-Methods", accessControlRequestMethod);
       }
+
       return "OK";
     });
 
