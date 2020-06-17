@@ -1,7 +1,7 @@
 package ch.ibw.appl.todo.server.item.infra;
 
-import ch.ibw.appl.todo.server.item.service.TodoItemService;
 import ch.ibw.appl.todo.server.item.model.TodoItem;
+import ch.ibw.appl.todo.server.item.service.TodoItemService;
 import ch.ibw.appl.todo.server.shared.service.JSONSerializer;
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.eclipse.jetty.http.HttpStatus;
@@ -32,6 +32,11 @@ public class TodoItemController {
     }, jsonSerializer::serialize);
 
     server.delete("/todo/items/:id", (request, response) -> {
+      if (request.session(false) == null) {
+        response.status(HttpStatus.UNAUTHORIZED_401);
+        return new Object();
+      }
+
       long id = Long.parseLong(request.params("id"));
       todoItemService.remove(id);
       return new Object();
