@@ -8,4 +8,5 @@ public interface Repository<T> {
   List<T> all();
   ModelId add(T obj);
   T get(Long id);
+  void remove(Long id);
 }

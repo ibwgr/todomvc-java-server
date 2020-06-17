@@ -27,4 +27,8 @@ public class TodoItemService {
   public TodoItem getById(Long id) {
     return repo.get(id);
   }
+
+  public void remove(Long id) {
+    repo.remove(id);
+  }
 }

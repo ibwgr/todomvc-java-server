@@ -2,6 +2,7 @@ package ch.ibw.appl.todo.server.functional.shared;
 
 import ch.ibw.appl.todo.server.shared.infra.HttpServer;
 import ch.ibw.appl.todo.server.shared.service.JSONSerializer;
+import com.despegar.http.client.DeleteMethod;
 import com.despegar.http.client.GetMethod;
 import com.despegar.http.client.HttpClientException;
 import com.despegar.http.client.HttpResponse;
@@ -39,8 +40,22 @@ public class FunctionalTest {
     }
   }
 
+  public HttpResponse executeDelete(String path, String acceptType){
+    DeleteMethod method = httpClient.delete(path, false);
+    method.addHeader("Accept", acceptType);
+    try {
+      return httpClient.execute(method);
+    } catch (HttpClientException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
   public HttpResponse executeGet(String path) {
     return executeGet(path, "application/json");
+  }
+
+  public HttpResponse executeDelete(String path) {
+    return executeDelete(path, "application/json");
   }
 
   public HttpResponse executePost(String path, Object body){

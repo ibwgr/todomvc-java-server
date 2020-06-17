@@ -7,17 +7,10 @@ import org.sql2o.Connection;
 import org.sql2o.Query;
 import org.sql2o.Sql2o;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 public class TodoItemSQL2ORepository implements TodoItemRepository<TodoItem> {
 
@@ -59,7 +52,7 @@ public class TodoItemSQL2ORepository implements TodoItemRepository<TodoItem> {
 
   @Override
   public ModelId add(TodoItem item) {
-    try(Connection conn = sql2o.open()){
+    try (Connection conn = sql2o.open()) {
       Query preparedStatement = conn.createQuery("insert into TodoItem (description) values (:description)").bind(item);
       int newId = preparedStatement.executeUpdate().getResult();
       return ModelId.create(Long.valueOf(newId));
@@ -68,7 +61,16 @@ public class TodoItemSQL2ORepository implements TodoItemRepository<TodoItem> {
 
   @Override
   public TodoItem get(Long id) {
-    return null;
+    try (Connection conn = sql2o.open()) {
+      return conn.createQuery("select * from TodoItem where id = :id").addParameter("id", id).executeAndFetchFirst(TodoItem.class);
+    }
+  }
+
+  @Override
+  public void remove(Long id) {
+    try (Connection conn = sql2o.open()) {
+      conn.createQuery("delete from TodoItem where id = :id").addParameter("id", id).executeUpdate();
+    }
   }
 
   @Override

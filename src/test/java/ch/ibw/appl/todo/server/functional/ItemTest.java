@@ -55,6 +55,17 @@ public class ItemTest extends FunctionalTest {
   }
 
   @Test
+  public void delete_byId() {
+    HttpResponse response = executeDelete("/todo/items/23");
+
+    assertEquals(HttpStatus.OK_200, response.code());
+    assertEquals("application/json", response.headers().get("Content-Type").get(0));
+
+    String body = new String(response.body());
+    assertEquals("{}", body);
+  }
+
+  @Test
   public void get_byId_notFound() {
     HttpResponse response = executeGet("/todo/items/42");
 

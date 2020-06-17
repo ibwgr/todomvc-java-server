@@ -32,6 +32,11 @@ public class TodoItemHibernateRepository implements TodoItemRepository<TodoItem>
   }
 
   @Override
+  public void remove(Long id) {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
   public TodoItem findByDescription(String description) {
     // TODO
     return null;

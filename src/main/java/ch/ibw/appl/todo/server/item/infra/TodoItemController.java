@@ -12,7 +12,7 @@ public class TodoItemController {
 
   public TodoItemController(Boolean isTest) {
     if (isTest) {
-//      todoItemService = new TodoItemService(new TodoItemSQL2ORepository(isTest));
+      todoItemService = new TodoItemService(new TodoItemSQL2ORepository(isTest));
     } else {
       todoItemService = new TodoItemService(new TodoItemInMemoryRepository(isTest));
 //      todoItemService = new TodoItemService(new TodoItemHibernateRepository());
@@ -23,15 +23,18 @@ public class TodoItemController {
     JSONSerializer jsonSerializer = new JSONSerializer();
 
     server.get("/todo/items", "application/json",
-            (request, response) -> {
-              response.type("application/json");
-              return todoItemService.all();
-            },
+            (request, response) -> todoItemService.all(),
             jsonSerializer::serialize);
 
     server.get("/todo/items/:id", (request, response) -> {
       long id = Long.parseLong(request.params("id"));
       return todoItemService.getById(id);
+    }, jsonSerializer::serialize);
+
+    server.delete("/todo/items/:id", (request, response) -> {
+      long id = Long.parseLong(request.params("id"));
+      todoItemService.remove(id);
+      return new Object();
     }, jsonSerializer::serialize);
 
     server.post("/todo/items", (request, response) -> {

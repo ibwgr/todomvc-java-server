@@ -11,4 +11,5 @@ public interface TodoItemRepository<T extends TodoItem> extends Repository<T> {
   ModelId add(T obj);
   T get(Long id);
   T findByDescription(String description);
+  void remove(Long id);
 }

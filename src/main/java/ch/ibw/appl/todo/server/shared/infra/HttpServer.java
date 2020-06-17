@@ -60,7 +60,7 @@ public class HttpServer {
         String message = ((ValidationError) exception).message;
         JsonNode node = JsonNodeFactory.instance.objectNode().set("message", JsonNodeFactory.instance.textNode(message));
         response.body(node.toString());
-        response.status(HttpStatus.BAD_REQUEST_400);
+        response.status(HttpStatus.UNPROCESSABLE_ENTITY_422);
       } else {
         LoggerFactory.getLogger(HttpServer.class).error(exception.toString());
         response.body("");

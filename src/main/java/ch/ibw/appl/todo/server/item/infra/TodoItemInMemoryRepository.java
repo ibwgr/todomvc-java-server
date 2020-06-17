@@ -47,4 +47,9 @@ public class TodoItemInMemoryRepository implements TodoItemRepository<TodoItem> 
     // TODO
     return null;
   }
+
+  @Override
+  public void remove(Long id) {
+    map.remove(ModelId.create(id));
+  }
 }
