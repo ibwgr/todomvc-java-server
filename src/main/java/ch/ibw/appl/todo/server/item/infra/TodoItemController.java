@@ -1,7 +1,7 @@
 package ch.ibw.appl.todo.server.item.infra;
 
-import ch.ibw.appl.todo.server.item.service.TodoItemService;
 import ch.ibw.appl.todo.server.item.model.TodoItem;
+import ch.ibw.appl.todo.server.item.service.TodoItemService;
 import ch.ibw.appl.todo.server.shared.service.JSONSerializer;
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.eclipse.jetty.http.HttpStatus;
@@ -12,10 +12,10 @@ public class TodoItemController {
 
   public TodoItemController(Boolean isTest) {
     if (isTest) {
-      todoItemService = new TodoItemService(new TodoItemInMemoryRepository(isTest));
-//      todoItemService = new TodoItemService(new TodoItemSQL2ORepository(isTest));
+      todoItemService = new TodoItemService(new TodoItemSQL2ORepository(isTest));
     } else {
-      todoItemService = new TodoItemService(new TodoItemHibernateRepository());
+      todoItemService = new TodoItemService(new TodoItemInMemoryRepository(isTest));
+//      todoItemService = new TodoItemService(new TodoItemHibernateRepository());
     }
   }
 
@@ -23,10 +23,7 @@ public class TodoItemController {
     JSONSerializer jsonSerializer = new JSONSerializer();
 
     server.get("/todo/items", "application/json",
-            (request, response) -> {
-              response.type("application/json");
-              return todoItemService.all();
-            },
+            (request, response) -> todoItemService.all(),
             jsonSerializer::serialize);
 
     server.get("/todo/items/:id", (request, response) -> {
