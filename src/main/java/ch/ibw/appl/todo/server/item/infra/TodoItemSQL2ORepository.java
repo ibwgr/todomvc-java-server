@@ -24,7 +24,13 @@ public class TodoItemSQL2ORepository implements TodoItemRepository<TodoItem> {
         executeFile(conn, "META-INF/testdata.sql");
       }
     }else{
-      sql2o = new Sql2o("jdbc:mysql://localhost:3306/todo", "todo-web", "1234");
+      String defaultURI = "jdbc:mysql://localhost:3306/todo";
+      String jdbcURI = System.getenv("JDBC_URI");
+      if (jdbcURI == null || jdbcURI.isEmpty()) {
+        jdbcURI = defaultURI;
+      }
+      System.out.println("JDBC URI:" + jdbcURI);
+      sql2o = new Sql2o(jdbcURI, "todo-web", "1234");
     }
   }
 
