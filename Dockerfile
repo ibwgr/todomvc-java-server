@@ -1,5 +1,5 @@
 # Base image, "build" is the alias of this first step
-FROM maven:3.6.3-jdk-8 as build
+FROM maven:3.6.3-jdk-11 as build
 
 # Set dir inside container
 WORKDIR /app
@@ -11,12 +11,12 @@ COPY . .
 RUN mvn clean package
 
 # Base image
-FROM openjdk:8-jre
+FROM openjdk:11-jre
 
 # Set dir inside the container
 WORKDIR /app
 
-# Copy built ja file from previous "buil" step to app dir
+# Copy built ja file from previous "build" step to app dir
 COPY --from=build /app/target/server-*.jar /app/
 
 # Make port accessible from outside of the container
