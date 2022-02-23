@@ -1,16 +1,15 @@
 package ch.ibw.appl.todo.server.functional;
 
-import ch.ibw.appl.todo.server.shared.service.JSONSerializer;
 import ch.ibw.appl.todo.server.functional.shared.FunctionalTest;
 import ch.ibw.appl.todo.server.item.model.ModelId;
 import ch.ibw.appl.todo.server.item.model.TodoItem;
-import com.despegar.http.client.GetMethod;
-import com.despegar.http.client.HttpClientException;
-import com.despegar.http.client.HttpResponse;
+import ch.ibw.appl.todo.server.shared.service.JSONSerializer;
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.eclipse.jetty.http.HttpStatus;
 import org.junit.Test;
 
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -20,73 +19,76 @@ import static org.junit.Assert.assertTrue;
 public class ItemTest extends FunctionalTest {
 
   @Test
-  public void notAcceptable() throws HttpClientException {
-    GetMethod method = httpClient.get("/todo/items", false);
-    HttpResponse response = httpClient.execute(method);
+  public void notAcceptable() {
+    HttpRequest.Builder method = httpClient.get("/todo/items");
+    HttpResponse<String> response = httpClient.execute(method);
 
-    assertEquals(HttpStatus.NOT_ACCEPTABLE_406, response.code());
+    assertEquals(HttpStatus.NOT_ACCEPTABLE_406, response.statusCode());
   }
 
   @Test
   public void get_todos() {
-    HttpResponse response = executeGet("/todo/items");
-//    HttpResponse response = executeGet("/todo/items", "text/csv");
+    HttpResponse<String> response = executeGet("/todo/items");
+//    HttpResponse<String response = executeGet("/todo/items", "text/csv");
 
-    assertEquals(HttpStatus.OK_200, response.code());
-    assertEquals("application/json", response.headers().get("Content-Type").get(0));
+    assertEquals(HttpStatus.OK_200, response.statusCode());
+    assertEquals("application/json", response.headers().firstValue("Content-Type").get());
 
-    String body = new String(response.body());
+    String body = response.body();
 
-    List<TodoItem> items = new JSONSerializer().deserialize(body, new TypeReference<List<TodoItem>>() {});
+    List<TodoItem> items = new JSONSerializer().deserialize(body, new TypeReference<List<TodoItem>>() {
+    });
     assertEquals("Item 23", items.get(0).description);
   }
 
   @Test
   public void get_byId() {
-    HttpResponse response = executeGet("/todo/items/23");
+    HttpResponse<String> response = executeGet("/todo/items/23");
 
-    assertEquals(HttpStatus.OK_200, response.code());
-    assertEquals("application/json", response.headers().get("Content-Type").get(0));
+    assertEquals(HttpStatus.OK_200, response.statusCode());
+    assertEquals("application/json", response.headers().firstValue("Content-Type").get());
 
-    String body = new String(response.body());
+    String body = response.body();
 
-    TodoItem item = new JSONSerializer().deserialize(body, new TypeReference<TodoItem>() {});
+    TodoItem item = new JSONSerializer().deserialize(body, new TypeReference<TodoItem>() {
+    });
     assertEquals("Item 23", item.description);
   }
 
   @Test
   public void get_byId_notFound() {
-    HttpResponse response = executeGet("/todo/items/42");
+    HttpResponse<String> response = executeGet("/todo/items/42");
 
-    assertEquals(HttpStatus.NOT_FOUND_404, response.code());
-    assertEquals("application/json", response.headers().get("Content-Type").get(0));
+    assertEquals(HttpStatus.NOT_FOUND_404, response.statusCode());
+    assertEquals("application/json", response.headers().firstValue("Content-Type").get());
 
-    String body = new String(response.body());
+    String body = response.body();
     assertEquals("", body);
   }
 
   @Test
   public void create_todo() {
     Object item = TodoItem.create("Neues Item");
-    HttpResponse response = executePost("/todo/items", item);
+    HttpResponse<String> response = executePost("/todo/items", item);
 
-    assertEquals(HttpStatus.CREATED_201, response.code());
-    assertEquals("application/json", response.headers().get("Content-Type").get(0));
+    assertEquals(HttpStatus.CREATED_201, response.statusCode());
+    assertEquals("application/json", response.headers().firstValue("Content-Type").get());
 
-    String body = new String(response.body());
-    ModelId id = new JSONSerializer().deserialize(body, new TypeReference<ModelId>() {});
+    String body = response.body();
+    ModelId id = new JSONSerializer().deserialize(body, new TypeReference<ModelId>() {
+    });
     assertNotNull(id);
   }
 
   @Test
   public void create_todo_validationFailed() {
     Object item = TodoItem.create("");
-    HttpResponse response = executePost("/todo/items", item);
+    HttpResponse<String> response = executePost("/todo/items", item);
 
-    assertEquals(HttpStatus.UNPROCESSABLE_ENTITY_422, response.code());
-    assertEquals("application/json", response.headers().get("Content-Type").get(0));
+    assertEquals(HttpStatus.UNPROCESSABLE_ENTITY_422, response.statusCode());
+    assertEquals("application/json", response.headers().firstValue("Content-Type").get());
 
-    String body = new String(response.body());
+    String body = response.body();
     assertTrue(body.contains("message"));
   }
 }

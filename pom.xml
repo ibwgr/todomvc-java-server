@@ -70,12 +70,6 @@
 
         <!-- Functional Tests with JUnit -->
         <dependency>
-            <groupId>com.despegar</groupId>
-            <artifactId>http-java-native-client</artifactId>
-            <version>1.0.4</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>

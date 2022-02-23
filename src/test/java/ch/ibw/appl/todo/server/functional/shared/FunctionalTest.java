@@ -2,12 +2,11 @@ package ch.ibw.appl.todo.server.functional.shared;
 
 import ch.ibw.appl.todo.server.shared.infra.HttpServer;
 import ch.ibw.appl.todo.server.shared.service.JSONSerializer;
-import com.despegar.http.client.GetMethod;
-import com.despegar.http.client.HttpClientException;
-import com.despegar.http.client.HttpResponse;
-import com.despegar.http.client.PostMethod;
 import org.junit.Rule;
 import spark.servlet.SparkApplication;
+
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 
 public class FunctionalTest {
 
@@ -29,31 +28,23 @@ public class FunctionalTest {
   @Rule
   public SparkServer<TodoApplication> httpClient = new SparkServer<>(TodoApplication.class);
 
-  public HttpResponse executeGet(String path, String acceptType){
-    GetMethod method = httpClient.get(path, false);
-    method.addHeader("Accept", acceptType);
-    try {
-      return httpClient.execute(method);
-    } catch (HttpClientException e) {
-      throw new RuntimeException(e);
-    }
+  public HttpResponse<String> executeGet(String path, String acceptType) {
+    HttpRequest.Builder method = httpClient.get(path);
+    method.header("Accept", acceptType);
+    return httpClient.execute(method);
   }
 
-  public HttpResponse executeGet(String path) {
+  public HttpResponse<String> executeGet(String path) {
     return executeGet(path, "application/json");
   }
 
-  public HttpResponse executePost(String path, Object body){
+  public HttpResponse<String> executePost(String path, Object body) {
     return executePost(path, body, "application/json");
   }
 
-  public HttpResponse executePost(String path, Object body, String acceptType) {
-    PostMethod method = httpClient.post(path, new JSONSerializer().serialize(body),false);
-    method.addHeader("Accept", acceptType);
-    try {
-      return httpClient.execute(method);
-    } catch (HttpClientException e) {
-      throw new RuntimeException(e);
-    }
+  public HttpResponse<String> executePost(String path, Object body, String acceptType) {
+    HttpRequest.Builder method = httpClient.post(path, new JSONSerializer().serialize(body));
+    method.header("Accept", acceptType);
+    return httpClient.execute(method);
   }
 }
