@@ -34,16 +34,16 @@ public class TodoItemSQL2ORepository implements TodoItemRepository<TodoItem> {
     }
   }
 
-  private void executeFile(Connection conn, String s) {
-    String path = getClass().getClassLoader().getResource(s).getPath();
+  private void executeFile(Connection conn, String resourcePath) {
+    String path = getClass().getClassLoader().getResource(resourcePath).getPath();
     String content;
     try {
       content = new String(Files.readAllBytes(Paths.get(path)));
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
-    for(String line : content.split(";")){
-      if(!line.trim().isEmpty()){
+    for (String line : content.split(";")) {
+      if (!line.trim().isEmpty()) {
         conn.createQuery(line).executeUpdate();
       }
     }
@@ -61,7 +61,7 @@ public class TodoItemSQL2ORepository implements TodoItemRepository<TodoItem> {
     try(Connection conn = sql2o.open()){
       Query preparedStatement = conn.createQuery("insert into TodoItem (description) values (:description)").bind(item);
       int newId = preparedStatement.executeUpdate().getResult();
-      return ModelId.create(Long.valueOf(newId));
+      return ModelId.create((long) newId);
     }
   }
 
