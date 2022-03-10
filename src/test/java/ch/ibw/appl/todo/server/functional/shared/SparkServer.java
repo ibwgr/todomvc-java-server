@@ -37,7 +37,7 @@ public class SparkServer<T extends SparkApplication> extends ExternalResource {
 
   @Override
   protected void before() throws Throwable {
-    this.sparkApplication = this.sparkApplicationClass.newInstance();
+    this.sparkApplication = this.sparkApplicationClass.getDeclaredConstructor().newInstance();
     this.sparkApplication.init();
   }
 
