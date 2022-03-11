@@ -11,11 +11,14 @@ import java.net.http.HttpResponse;
 public class FunctionalTest {
 
   public static class TodoApplication implements SparkApplication {
-    private HttpServer httpServer;
+    private final HttpServer httpServer;
+
+    public TodoApplication(Integer port) {
+      httpServer = new HttpServer(String.valueOf(port), true);
+    }
 
     @Override
     public void init() {
-      httpServer = new HttpServer("4567", true);
       httpServer.start();
     }
 
@@ -26,7 +29,7 @@ public class FunctionalTest {
   }
 
   @Rule
-  public SparkServer<TodoApplication> httpClient = new SparkServer<>(TodoApplication.class);
+  public SparkServer<TodoApplication> httpClient = new SparkServer<>(TodoApplication.class, 4567);
 
   public HttpResponse<String> executeGet(String path, String acceptType) {
     HttpRequest.Builder method = httpClient.get(path);

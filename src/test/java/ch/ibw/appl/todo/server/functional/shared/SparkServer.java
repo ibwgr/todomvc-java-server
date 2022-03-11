@@ -3,7 +3,6 @@ package ch.ibw.appl.todo.server.functional.shared;
 import org.junit.rules.ExternalResource;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
-import spark.Service;
 import spark.servlet.SparkApplication;
 
 import java.io.IOException;
@@ -17,17 +16,15 @@ public class SparkServer<T extends SparkApplication> extends ExternalResource {
   private final Class<T> sparkApplicationClass;
   private T sparkApplication;
   private final String protocolHostPort;
+  private int port;
   private final HttpClient httpClient;
   private final HttpRequest.Builder requestBuilder = HttpRequest.newBuilder();
-
-  SparkServer(Class<T> sparkApplicationClass) {
-    this(sparkApplicationClass, Service.SPARK_DEFAULT_PORT);
-  }
 
   SparkServer(Class<T> sparkApplicationClass, int port) {
     this.sparkApplicationClass = sparkApplicationClass;
     this.protocolHostPort = "http://localhost:" + port;
     this.httpClient = HttpClient.newHttpClient();
+    this.port = port;
   }
 
   @Override
@@ -37,7 +34,7 @@ public class SparkServer<T extends SparkApplication> extends ExternalResource {
 
   @Override
   protected void before() throws Throwable {
-    this.sparkApplication = this.sparkApplicationClass.getDeclaredConstructor().newInstance();
+    this.sparkApplication = this.sparkApplicationClass.getDeclaredConstructor(Integer.class).newInstance(port);
     this.sparkApplication.init();
   }
 
