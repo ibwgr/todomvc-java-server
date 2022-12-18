@@ -16,7 +16,7 @@ FROM openjdk:11-jre
 # Set dir inside the container
 WORKDIR /app
 
-# Copy built ja file from previous "build" step to app dir
+# Copy built jar file from previous "build" step to app dir
 COPY --from=build /app/target/server-*.jar /app/
 
 # Make port accessible from outside of the container

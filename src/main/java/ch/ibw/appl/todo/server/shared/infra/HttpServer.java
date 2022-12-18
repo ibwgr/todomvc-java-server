@@ -32,7 +32,8 @@ public class HttpServer {
       final boolean isCorsPreflight = request.requestMethod().equalsIgnoreCase("options");
       final boolean isHello = request.pathInfo().equalsIgnoreCase("/hello");
       if(!isHello && !isCorsPreflight){
-        final boolean clientWantsJson = request.headers("Accept").contains("application/json");
+        String accept = request.headers("Accept");
+        boolean clientWantsJson = accept != null && accept.contains("application/json");
         if(!clientWantsJson){
           server.halt(HttpStatus.NOT_ACCEPTABLE_406);
         }
