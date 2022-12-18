@@ -8,6 +8,7 @@ import org.sql2o.Query;
 import org.sql2o.Sql2o;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -35,10 +36,9 @@ public class TodoItemSQL2ORepository implements TodoItemRepository<TodoItem> {
   }
 
   private void executeFile(Connection conn, String resourcePath) {
-    String path = getClass().getClassLoader().getResource(resourcePath).getPath();
     String content;
-    try {
-      content = new String(Files.readAllBytes(Paths.get(path)));
+    try (InputStream stream = getClass().getClassLoader().getResourceAsStream(resourcePath)) {
+        content = new String(stream.readAllBytes());
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
